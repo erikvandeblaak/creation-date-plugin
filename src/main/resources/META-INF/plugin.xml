@@ -1,0 +1,24 @@
+<idea-plugin>
+    <id>nl.vandeblaak.creationdate</id>
+    <name>Creation Date in Project View</name>
+    <vendor url="https://www.vandeblaak.com/">Erik van de Blaak</vendor>
+
+    <description><![CDATA[
+        <p>Shows when a file or folder was created. Rest the mouse on a file or folder in the
+        <b>Project</b> tool window and a small yellow balloon shows its creation date and time,
+        read from the file system.</p>
+        <ul>
+            <li>Works for files and folders on the local disk.</li>
+            <li>Nothing to configure: install it and hover.</li>
+            <li>English, or Dutch when your system language is Dutch.</li>
+        </ul>
+        <p>Source code and updates:
+        <a href="https://github.com/erikvandeblaak/creation-date-plugin">github.com/erikvandeblaak/creation-date-plugin</a></p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="nl.vandeblaak.creationdate.CreationDateStartup"/>
+    </extensions>
+</idea-plugin>
