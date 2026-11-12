@@ -7,6 +7,7 @@ import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -60,17 +62,23 @@ public class CreationDateTest extends BasePlatformTestCase {
     }
 
     public void testReadsCreationDateOfFile() throws Exception {
-        PsiFile psiFile = myFixture.addFileToProject("src/index.txt", "hello");
-        Files.setAttribute(psiFile.getVirtualFile().toNioPath(), "basic:creationTime", FileTime.from(CREATED));
-
-        assertEquals(CREATED, CreationDates.of(psiFile.getVirtualFile()));
+        assertReadsCreationDate(myFixture.addFileToProject("src/index.txt", "hello").getVirtualFile());
     }
 
     public void testReadsCreationDateOfDirectory() throws Exception {
-        VirtualFile dir = myFixture.addFileToProject("dir/sub/a.txt", "").getVirtualFile().getParent();
-        Files.setAttribute(dir.toNioPath(), "basic:creationTime", FileTime.from(CREATED));
+        assertReadsCreationDate(myFixture.addFileToProject("dir/sub/a.txt", "").getVirtualFile().getParent());
+    }
 
-        assertEquals(CREATED, CreationDates.of(dir));
+    private static void assertReadsCreationDate(VirtualFile file) throws Exception {
+        Path path = file.toNioPath();
+        Files.setAttribute(path, "basic:creationTime", FileTime.from(CREATED));
+        // Windows and macOS can set the creation time; Linux keeps the real one, so compare with what the disk reports
+        if (SystemInfo.isWindows || SystemInfo.isMac) {
+            assertEquals(CREATED, CreationDates.of(file));
+        } else {
+            Instant onDisk = Files.readAttributes(path, BasicFileAttributes.class).creationTime().toInstant();
+            assertEquals(onDisk, CreationDates.of(file));
+        }
     }
 
     public void testNonLocalFileHasNoDate() throws Exception {

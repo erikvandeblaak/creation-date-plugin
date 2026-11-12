@@ -29,6 +29,7 @@ Voeg deze bron één keer toe; daarna meldt PhpStorm nieuwe versies zelf:
 - PhpStorm 2026.2 of nieuwer (build 262+). De plugin gebruikt alleen het IntelliJ-platform, dus hij
   hoort ook te werken in IntelliJ IDEA, WebStorm, PyCharm en de andere JetBrains-IDE's; getest is hij in PhpStorm.
 - Bestanden op een lokale schijf. Bestanden in archieven of op externe bestandssystemen hebben geen aanmaakdatum.
+  Op Linux-bestandssystemen die geen aanmaaktijd bijhouden, geeft Java de laatste wijzigingstijd.
 - De taal volgt je systeem: Nederlands op een Nederlands systeem, anders Engels.
 
 ## Licentie

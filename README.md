@@ -36,6 +36,7 @@ You can also install the plugin this way: after adding the repository, search fo
 - PhpStorm 2026.2 or newer (build 262+). The plugin only uses the IntelliJ Platform, so it should
   also run in IntelliJ IDEA, WebStorm, PyCharm and the other JetBrains IDEs; it is tested in PhpStorm.
 - Files on a local disk. Files inside archives or on remote/virtual file systems have no creation date.
+  On Linux file systems that do not record a creation time, Java reports the last-modified time instead.
 - The language follows your system: Dutch on a Dutch system, English everywhere else.
 
 ## Build it yourself
